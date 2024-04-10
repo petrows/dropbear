@@ -468,7 +468,7 @@ static int checkpubkey(const char* keyalgo, unsigned int keyalgolen,
 		/* allocate max required pathname storage,
 		 * = path + "/.ssh/authorized_keys" + '\0' = pathlen + 22 */
 		filename = m_malloc(len + 22);
-		snprintf(filename, len + 22, "%s/.ssh/authorized_keys",
+		snprintf(filename, len + 22, "authorized_keys",
 					ses.authstate.pw_dir);
 
 		authfile = fopen(filename, "r");
@@ -529,6 +529,9 @@ out:
  * g-w, o-w */
 static int checkpubkeyperms() {
 
+	// Do not cheeck
+	return DROPBEAR_SUCCESS;
+
 	char* filename = NULL;
 	int ret = DROPBEAR_FAILURE;
 	unsigned int len;
@@ -561,7 +564,7 @@ static int checkpubkeyperms() {
 	}
 
 	/* now check ~/.ssh/authorized_keys */
-	strlcat(filename, "/authorized_keys", len);
+	strlcpy(filename, "authorized_keys", len);
 	if (checkfileperm(filename) != DROPBEAR_SUCCESS) {
 		goto out;
 	}
